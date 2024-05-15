@@ -11,19 +11,13 @@ load_dotenv()
 # Use the environment variables
 TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 ALLOWED_ROLE_ID_str = os.getenv('ALLOWED_ROLE_ID')
-TARGET_CHANNEL_ID_str = os.getenv('TARGET_CHANNEL_ID')
+JOB_CHANNEL_ID_str = os.getenv('JOB_CHANNEL_ID')  # Channel ID for job postings
+SERVICE_CHANNEL_ID_str = os.getenv('SERVICE_CHANNEL_ID')  # Channel ID for service postings
 
-if TARGET_CHANNEL_ID_str is not None:
-    TARGET_CHANNEL_ID = int(TARGET_CHANNEL_ID_str)
-else:
-    print("Error: TARGET_CHANNEL_ID environment variable is not set.")
-    exit()
-
-if ALLOWED_ROLE_ID_str is not None:
-    ALLOWED_ROLE_ID = int(ALLOWED_ROLE_ID_str)
-else:
-    print("Error: ALLOWED_ROLE_ID environment variable is not set.")
-    exit()
+# Convert environment variables to integers
+ALLOWED_ROLE_ID = int(ALLOWED_ROLE_ID_str) if ALLOWED_ROLE_ID_str else None
+JOB_CHANNEL_ID = int(JOB_CHANNEL_ID_str) if JOB_CHANNEL_ID_str else None
+SERVICE_CHANNEL_ID = int(SERVICE_CHANNEL_ID_str) if SERVICE_CHANNEL_ID_str else None
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -36,13 +30,26 @@ async def on_ready():
     print(f'Bot is ready. Logged in as {bot.user}')
 
 
-@bot.command(name='post')
-async def post(ctx, *, message: str):
+@bot.command(name='postjob')
+async def post_job(ctx, *, message: str):
+    await post_to_channel(ctx, message, JOB_CHANNEL_ID)
+
+
+@bot.command(name='postservices')
+async def post_services(ctx, *, message: str):
+    await post_to_channel(ctx, message, SERVICE_CHANNEL_ID)
+
+
+async def post_to_channel(ctx, message, channel_id):
     try:
+        if channel_id is None:
+            await ctx.send('Target channel not found.')
+            return
+
         # Check if the author has the allowed role ID
         role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
         if role in ctx.author.roles:
-            channel = bot.get_channel(TARGET_CHANNEL_ID)
+            channel = bot.get_channel(channel_id)
             if channel:
                 await channel.send(message)
                 await ctx.send(f'Message sent to {channel.mention}')
@@ -59,7 +66,7 @@ async def post(ctx, *, message: str):
 # Keep the web server alive
 keep_alive()
 
-if TOKEN is not None:
+if TOKEN:
     bot.run(TOKEN)
 else:
     print("Error: DISCORD_BOT_TOKEN environment variable is not set.")
