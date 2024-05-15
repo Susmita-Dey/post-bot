@@ -11,5 +11,10 @@
       "src": "/(.*)",
       "dest": "bot.py"
     }
-  ]
+  ],
+  "functions": {
+    "api/api.py": {
+      "runtime": "python3.8"
+    }
+  }
 }
