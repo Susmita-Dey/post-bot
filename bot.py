@@ -24,23 +24,25 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
-
 @bot.event
 async def on_ready():
     print(f'Bot is ready. Logged in as {bot.user}')
 
-
 @bot.command(name='postjob')
 async def post_job(ctx, *, message: str):
-    await post_to_channel(ctx, message, JOB_CHANNEL_ID)
-
+    await post_to_channel(ctx, message, JOB_CHANNEL_ID, "New Job Posting")
 
 @bot.command(name='postservices')
 async def post_services(ctx, *, message: str):
-    await post_to_channel(ctx, message, SERVICE_CHANNEL_ID)
+    await post_to_channel(ctx, message, SERVICE_CHANNEL_ID, "New Service Offering")
 
+# Command to post message to any channel
+@bot.command(name='post')
+async def post_embed(ctx, channel_id: int, title: str, *, message: str):
+    await post_to_any_channel(ctx, channel_id, title, message)
 
-async def post_to_channel(ctx, message, channel_id):
+# Function to post message to specific channels
+async def post_to_channel(ctx, message, channel_id, title):
     try:
         if channel_id is None:
             await ctx.send('Target channel not found.')
@@ -51,8 +53,13 @@ async def post_to_channel(ctx, message, channel_id):
         if role in ctx.author.roles:
             channel = bot.get_channel(channel_id)
             if channel:
-                await channel.send(message)
-                await ctx.send(f'Message sent to {channel.mention}')
+                embed = discord.Embed(
+                    title=title,
+                    description=message,
+                    color=0xffd700  # Gold color for the embed border
+                )
+                await channel.send(embed=embed)
+                await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
         else:
@@ -62,6 +69,29 @@ async def post_to_channel(ctx, message, channel_id):
         traceback.print_exc()
         await ctx.send('An error occurred while trying to execute the command.')
 
+# Function for postembed to post message to any channel
+async def post_to_any_channel(ctx, channel_id, title, message):
+    try:
+        # Check if the author has the allowed role ID
+        role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
+        if role in ctx.author.roles:
+            channel = bot.get_channel(channel_id)
+            if channel:
+                embed = discord.Embed(
+                    title=title,
+                    description=message,
+                    color=0xffd700  # Gold color for the embed border
+                )
+                await channel.send(embed=embed)
+                await ctx.send(f'Embed message sent to {channel.mention}')
+            else:
+                await ctx.send('Target channel not found.')
+        else:
+            await ctx.send('You do not have the required role to use this command.')
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        traceback.print_exc()
+        await ctx.send('An error occurred while trying to execute the command.')
 
 # Keep the web server alive
 keep_alive()
