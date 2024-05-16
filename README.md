@@ -63,8 +63,8 @@ Posts an embed message to any specified channel with a custom title and message.
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/Susmita-Dey/MoneyMotivesBot.git
-   cd MoneyMotivesBot
+   git clone https://github.com/Susmita-Dey/post-bot.git
+   cd post-bot
    ```
 
 2. **Create a virtual environment and activate it:**
