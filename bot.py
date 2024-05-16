@@ -37,7 +37,7 @@ async def post_services(ctx, *, message: str):
     await post_to_channel(ctx, message, SERVICE_CHANNEL_ID, "New Service Offering")
 
 @bot.command(name='post')
-async def post(ctx, channel: discord.TextChannel, title: str, message: str):
+async def post(ctx, channel: discord.TextChannel, title: str, *, message: str):
     await post_to_any_channel(ctx, channel.id, title, message)
 
 async def post_to_channel(ctx, message, channel_id, title):
@@ -59,6 +59,7 @@ async def post_to_channel(ctx, message, channel_id, title):
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
                 await channel.send(embed=embed)
+                await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
         else:
@@ -83,6 +84,7 @@ async def post_to_any_channel(ctx, channel_id, title, message):
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
                 await channel.send(embed=embed)
+                await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
         else:
