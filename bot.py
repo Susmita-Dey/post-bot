@@ -56,12 +56,9 @@ async def post_to_channel(ctx, message, channel_id, title):
                     description=message,
                     color=0xffd700  # Gold color for the embed border
                 )
-                # Add an image to the embed
-                # embed.set_image(url=image_url)
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
                 await channel.send(embed=embed)
-                await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
         else:
@@ -83,12 +80,9 @@ async def post_to_any_channel(ctx, channel_id, title, message):
                     description=message,
                     color=0xffd700  # Gold color for the embed border
                 )
-                # Add an image to the embed
-                # embed.set_image(url=image_url)
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
                 await channel.send(embed=embed)
-                await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
         else:
