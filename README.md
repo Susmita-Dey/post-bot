@@ -44,12 +44,12 @@ Posts an embed message to any specified channel with a custom title and message.
 
 **Usage:**
 ```
-/post #channelname <Title> <Message-content>
+/post #channelname <Title> <Message-content> <Image-url>
 ```
 
 **Example:**
 ```
-/post #general "Announcement" This is an important announcement!
+/post #channelname "Title" "Message content goes here." "https://example.com/custom_image.png"
 ```
 
 ## Setup
@@ -93,7 +93,7 @@ Posts an embed message to any specified channel with a custom title and message.
    python bot.py
    ```
 
-### Deploying on Vercel
+### Deploying the bot
 Create an account on Render. Install Render on your git repository and hit deploy
 
 ## Permissions
