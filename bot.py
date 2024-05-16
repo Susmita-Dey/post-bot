@@ -36,12 +36,10 @@ async def post_job(ctx, *, message: str):
 async def post_services(ctx, *, message: str):
     await post_to_channel(ctx, message, SERVICE_CHANNEL_ID, "New Service Offering")
 
-# Command to post message to any channel
 @bot.command(name='post')
-async def post_embed(ctx, channel_id: int, title: str, *, message: str):
-    await post_to_any_channel(ctx, channel_id, title, message)
+async def post(ctx, channel: discord.TextChannel, title: str, *, message: str):
+    await post_to_any_channel(ctx, channel.id, title, message)
 
-# Function to post message to specific channels
 async def post_to_channel(ctx, message, channel_id, title):
     try:
         if channel_id is None:
@@ -69,7 +67,6 @@ async def post_to_channel(ctx, message, channel_id, title):
         traceback.print_exc()
         await ctx.send('An error occurred while trying to execute the command.')
 
-# Function for postembed to post message to any channel
 async def post_to_any_channel(ctx, channel_id, title, message):
     try:
         # Check if the author has the allowed role ID

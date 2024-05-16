@@ -44,12 +44,12 @@ Posts an embed message to any specified channel with a custom title and message.
 
 **Usage:**
 ```
-/post <channel_id> <title> <message>
+/post #channelname <Title> <Message-content>
 ```
 
 **Example:**
 ```
-/post 123456789012345678 "Announcement" "This is an important announcement!"
+/post #general "Announcement" This is an important announcement!
 ```
 
 ## Setup
