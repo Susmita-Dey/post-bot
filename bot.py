@@ -59,7 +59,6 @@ async def post_to_channel(ctx, message, channel_id, title):
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
                 await channel.send(content=None, embed=embed)
-                await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
         else:
@@ -84,7 +83,6 @@ async def post_to_any_channel(ctx, channel_id, title, message):
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
                 await channel.send(content=None, embed=embed)
-                await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
         else:
