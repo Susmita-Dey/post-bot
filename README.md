@@ -16,12 +16,12 @@ Posts a job announcement to the predefined job channel.
 
 **Usage:**
 ```
-/postjob <message> <imageUrl>
+/postjob <message>
 ```
 
 **Example:**
 ```
-/postjob "We are hiring a new software developer!" "https://images.pexels.com/photos/932261/pexels-photo-932261.jpeg"
+/postjob "We are hiring a new software developer!"
 ```
 
 ### /postservices
@@ -30,12 +30,12 @@ Posts a service offering to the predefined service channel.
 
 **Usage:**
 ```
-/postservices <message> <imageUrl>
+/postservices <message>
 ```
 
 **Example:**
 ```
-/postservices "Offering web development services at competitive prices." "https://images.pexels.com/photos/932261/pexels-photo-932261.jpeg"
+/postservices "Offering web development services at competitive prices."
 ```
 
 ### /post
@@ -44,12 +44,12 @@ Posts an embed message to any specified channel with a custom title and message.
 
 **Usage:**
 ```
-/post #channelname <Title> <Message-content> <Image-url>
+/post #channelname <Title> <Message-content>
 ```
 
 **Example:**
 ```
-/post #channelname "Title" "Message content goes here." "https://images.pexels.com/photos/932261/pexels-photo-932261.jpeg"
+/post #channelname "Title" "Message content goes here."
 ```
 
 ## Setup

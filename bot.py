@@ -33,14 +33,14 @@ async def post_job(ctx, *, message: str):
     await post_to_channel(ctx, message, JOB_CHANNEL_ID, "New Job Posting")
 
 @bot.command(name='postservices')
-async def post_services(ctx, *, message: str, image_url:str):
-    await post_to_channel(ctx, message, SERVICE_CHANNEL_ID, "New Service Offering", image_url)
+async def post_services(ctx, *, message: str):
+    await post_to_channel(ctx, message, SERVICE_CHANNEL_ID, "New Service Offering")
 
 @bot.command(name='post')
-async def post(ctx, channel: discord.TextChannel, title: str, message: str, image_url: str):
-    await post_to_any_channel(ctx, channel.id, title, message, image_url)
+async def post(ctx, channel: discord.TextChannel, title: str, message: str):
+    await post_to_any_channel(ctx, channel.id, title, message)
 
-async def post_to_channel(ctx, message, channel_id, title, image_url):
+async def post_to_channel(ctx, message, channel_id, title):
     try:
         if channel_id is None:
             await ctx.send('Target channel not found.')
@@ -57,10 +57,10 @@ async def post_to_channel(ctx, message, channel_id, title, image_url):
                     color=0xffd700  # Gold color for the embed border
                 )
                 # Add an image to the embed
-                embed.set_image(url=image_url)
+                # embed.set_image(url=image_url)
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
-                await channel.send(embed=embed)
+                # await channel.send(embed=embed)
                 await ctx.send(f'Embed message sent to {channel.mention}')
             else:
                 await ctx.send('Target channel not found.')
@@ -71,7 +71,7 @@ async def post_to_channel(ctx, message, channel_id, title, image_url):
         traceback.print_exc()
         await ctx.send('An error occurred while trying to execute the command.')
 
-async def post_to_any_channel(ctx, channel_id, title, message, image_url):
+async def post_to_any_channel(ctx, channel_id, title, message):
     try:
         # Check if the author has the allowed role ID
         role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
@@ -84,7 +84,7 @@ async def post_to_any_channel(ctx, channel_id, title, message, image_url):
                     color=0xffd700  # Gold color for the embed border
                 )
                 # Add an image to the embed
-                embed.set_image(url=image_url)
+                # embed.set_image(url=image_url)
                 # Add a footer to the embed
                 embed.set_footer(text='- MoneyMotives Team')
                 await channel.send(embed=embed)
