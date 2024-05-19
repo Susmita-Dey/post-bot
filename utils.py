@@ -2,17 +2,16 @@ import traceback
 import discord
 import discord.utils
 from discord.ext import commands
-from settings import ALLOWED_ROLE_ID
 
 
-def make_default_embed(title: str, message: str, footer: str) -> discord.Embed:
+def make_default_embed(title: str, message: str, author: str) -> discord.Embed:
     """
     Produces an embed with the default presentation.
 
     Arguments:
         title (str): Title for the embed.
         message (str): Message for the main body of the embed.
-        footer (str): Text for the footer of the embed.
+        author (str): Display name of the author of the embed.
 
     Returns:
         discord.Embed: An embed with the default template and the given content.
@@ -23,8 +22,13 @@ def make_default_embed(title: str, message: str, footer: str) -> discord.Embed:
         color=0xFFD700,  # Gold color for the embed border
     )
     # Add a footer to the embed
-    embed.set_footer(text=footer)
+    embed.set_footer(text=f"- {author}")
     return embed
+
+
+def author_has_permission(ctx, allowed_role_id):
+    role = discord.utils.get(ctx.guild.roles, id=allowed_role_id)
+    return role in ctx.author.roles
 
 
 async def post_to_channel(
@@ -40,17 +44,13 @@ async def post_to_channel(
         title (str): Title of the embed to put in the message.
     """
     try:
-        # Check if the author has the allowed role ID
-        role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
-        if role not in ctx.author.roles:
-            await ctx.send("You do not have the required role to use this command.")
-            return
         # Get channel and confirm that it exists
         channel = ctx.guild.get_channel(channel_id)
         if not channel:
             await ctx.send("Target channel not found.")
+            return
         # Send embed and delete original command message
-        embed = make_default_embed(title, message, f"- {ctx.author.display_name}")
+        embed = make_default_embed(title, message, ctx.author.display_name)
         await channel.send(embed=embed)
         await ctx.message.delete()
     except Exception as e:
