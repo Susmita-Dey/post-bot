@@ -45,41 +45,26 @@ async def post_services(ctx, *, message: str):
 
 @bot.command(name="post")
 async def post(ctx, channel: discord.TextChannel, title: str, *, message: str):
-    await post_to_any_channel(ctx, channel.id, title, message)
+    await post_to_channel(ctx, message, channel.id, title)
 
 
-async def post_to_channel(ctx, message, channel_id, title):
+async def post_to_channel(
+    ctx: commands.Context, message: str, channel_id: int, title: str
+):
+    """
+    Posts given message with given title to channel with given id.
+
+    Arguments:
+        ctx (discord.ext.commands.Context): Context under which the command was invoked.
+        message (str): Message to be sent.
+        channel_id (int): ID of the channel to which the message will be sent.
+        title (str): Title of the embed to put in the message.
+    """
     try:
         if channel_id is None:
             await ctx.send("Target channel not found.")
             return
 
-        # Check if the author has the allowed role ID
-        role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
-        if role in ctx.author.roles:
-            channel = bot.get_channel(channel_id)
-            if channel:
-                embed = discord.Embed(
-                    title=title,
-                    description=message,
-                    color=0xFFD700,  # Gold color for the embed border
-                )
-                # Add a footer to the embed
-                embed.set_footer(text=f"- {ctx.author.display_name}")
-                await channel.send(embed=embed)
-                await ctx.message.delete()  # Delete the original command message
-            else:
-                await ctx.send("Target channel not found.")
-        else:
-            await ctx.send("You do not have the required role to use this command.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        traceback.print_exc()
-        await ctx.send("An error occurred while trying to execute the command.")
-
-
-async def post_to_any_channel(ctx, channel_id, title, message):
-    try:
         # Check if the author has the allowed role ID
         role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
         if role in ctx.author.roles:
