@@ -1,4 +1,4 @@
-# MoneyMotivesBot: Discord Embed Bot
+# ManoBot: Discord Embed Bot
 
 This Discord bot allows users with a specific role to post messages as embeds to predefined channels or any specified channel using different commands. The bot includes commands for posting job and service announcements, as well as a flexible command for posting to any channel.
 
