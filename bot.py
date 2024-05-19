@@ -61,10 +61,6 @@ async def post_to_channel(
         title (str): Title of the embed to put in the message.
     """
     try:
-        if channel_id is None:
-            await ctx.send("Target channel not found.")
-            return
-
         # Check if the author has the allowed role ID
         role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
         if role in ctx.author.roles:
