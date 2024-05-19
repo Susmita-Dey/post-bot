@@ -1,4 +1,3 @@
-# from functools import partial
 import discord
 from discord.ext import commands
 from commands import post_job, post_services, post
