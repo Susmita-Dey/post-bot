@@ -65,7 +65,7 @@ async def post_to_channel(ctx, message, channel_id, title):
                     color=0xFFD700,  # Gold color for the embed border
                 )
                 # Add a footer to the embed
-                embed.set_footer(text="- MoneyMotives Team")
+                embed.set_footer(text=f"- {ctx.author.display_name}")
                 await channel.send(embed=embed)
                 await ctx.message.delete()  # Delete the original command message
             else:
@@ -91,7 +91,7 @@ async def post_to_any_channel(ctx, channel_id, title, message):
                     color=0xFFD700,  # Gold color for the embed border
                 )
                 # Add a footer to the embed
-                embed.set_footer(text="- MoneyMotives Team")
+                embed.set_footer(text=f"- {ctx.author.display_name}")
                 await channel.send(embed=embed)
                 await ctx.message.delete()  # Delete the original command message
             else:
