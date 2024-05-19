@@ -2,7 +2,6 @@ import traceback
 import discord
 import discord.utils
 from discord.ext import commands
-from settings import ALLOWED_ROLE_ID
 
 
 def make_default_embed(title: str, message: str, author: str) -> discord.Embed:
@@ -45,10 +44,6 @@ async def post_to_channel(
         title (str): Title of the embed to put in the message.
     """
     try:
-        # Check if the author has the allowed role ID
-        if not author_has_permission(ctx, ALLOWED_ROLE_ID):
-            await ctx.send("You do not have the required role to use this command.")
-            return
         # Get channel and confirm that it exists
         channel = ctx.guild.get_channel(channel_id)
         if not channel:

@@ -1,8 +1,7 @@
 from functools import partial, wraps
 import discord
 from discord.ext import commands
-from utils import post_to_channel
-from settings import JOB_CHANNEL_ID, SERVICE_CHANNEL_ID
+from utils import post_to_channel, author_has_permission
 
 
 class PostBot:
@@ -13,6 +12,8 @@ class PostBot:
         self.job_channel_id = job_channel_id
         self.service_channel_id = service_channel_id
         self.bot = commands.Bot(command_prefix="/", intents=intents)
+
+        # Add commands and listeners
         self.bot.event(self.on_ready)
         self.add_command("postjob", PostBot.post_job)
         self.add_command("postservices", PostBot.post_services)
@@ -28,12 +29,24 @@ class PostBot:
         print(f"Bot is ready. Logged in as {self.bot.user}")
 
     async def post_job(self, ctx, *, message: str):
-        await post_to_channel(ctx, message, JOB_CHANNEL_ID, "New Job Posting")
+        # Check if the author has the allowed role ID
+        if not author_has_permission(ctx, self.allowed_role_id):
+            await ctx.send("You do not have the required role to use this command.")
+            return
+        await post_to_channel(ctx, message, self.job_channel_id, "New Job Posting")
 
     async def post_services(self, ctx, *, message: str):
-        await post_to_channel(ctx, message, SERVICE_CHANNEL_ID, "New Service Offering")
+        if not author_has_permission(ctx, self.allowed_role_id):
+            await ctx.send("You do not have the required role to use this command.")
+            return
+        await post_to_channel(
+            ctx, message, self.service_channel_id, "New Service Offering"
+        )
 
     async def post(
         self, ctx, channel: discord.TextChannel, title: str, *, message: str
     ):
+        if not author_has_permission(ctx, self.allowed_role_id):
+            await ctx.send("You do not have the required role to use this command.")
+            return
         await post_to_channel(ctx, message, channel.id, title)
