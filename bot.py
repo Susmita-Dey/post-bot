@@ -48,6 +48,17 @@ async def post(ctx, channel: discord.TextChannel, title: str, *, message: str):
     await post_to_channel(ctx, message, channel.id, title)
 
 
+def make_default_embed(title: str, message: str, footer: str) -> discord.Embed:
+    embed = discord.Embed(
+        title=title,
+        description=message,
+        color=0xFFD700,  # Gold color for the embed border
+    )
+    # Add a footer to the embed
+    embed.set_footer(text=footer)
+    return embed
+
+
 async def post_to_channel(
     ctx: commands.Context, message: str, channel_id: int, title: str
 ):
@@ -63,22 +74,17 @@ async def post_to_channel(
     try:
         # Check if the author has the allowed role ID
         role = discord.utils.get(ctx.guild.roles, id=ALLOWED_ROLE_ID)
-        if role in ctx.author.roles:
-            channel = bot.get_channel(channel_id)
-            if channel:
-                embed = discord.Embed(
-                    title=title,
-                    description=message,
-                    color=0xFFD700,  # Gold color for the embed border
-                )
-                # Add a footer to the embed
-                embed.set_footer(text=f"- {ctx.author.display_name}")
-                await channel.send(embed=embed)
-                await ctx.message.delete()  # Delete the original command message
-            else:
-                await ctx.send("Target channel not found.")
-        else:
+        if role not in ctx.author.roles:
             await ctx.send("You do not have the required role to use this command.")
+            return
+        # Get channel and confirm that it exists
+        channel = bot.get_channel(channel_id)
+        if not channel:
+            await ctx.send("Target channel not found.")
+        # Send embed and delete original command message
+        embed = make_default_embed(title, message, f"- {ctx.author.display_name}")
+        await channel.send(embed=embed)
+        await ctx.message.delete()
     except Exception as e:
         print(f"An error occurred: {e}")
         traceback.print_exc()
